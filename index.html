@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>💕 Valentine đầu tiên với anh Hiếu 💕</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@300;400;600&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0a0a0a;
+      font-family: 'Quicksand', sans-serif;
+      -webkit-user-select: none;
+      user-select: none
+    }
+
+    /* ===== STARS ===== */
+    .stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0
+    }
+
+    .star {
+      position: absolute;
+      background: rgba(255, 182, 193, .6);
+      border-radius: 50%;
+      animation: tw var(--d) ease-in-out infinite alternate
+    }
+
+    @keyframes tw {
+      0% {
+        opacity: .2
+      }
+
+      100% {
+        opacity: 1
+      }
+    }
+
+    .vignette {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, .75) 100%);
+      z-index: 1;
+      pointer-events: none
+    }
+
+    /* ===== HEART LANDING ===== */
+    #landing {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: opacity .8s, transform .8s
+    }
+
+    #landing.gone {
+      opacity: 0;
+      transform: scale(1.5);
+      pointer-events: none
+    }
+
+    #heartBtn {
+      width: min(55vw, 200px);
+      height: min(55vw, 200px);
+      cursor: pointer;
+      position: relative;
+      animation: pulse 1.2s ease-in-out infinite;
+      filter: drop-shadow(0 0 30px rgba(255, 20, 80, .6)) drop-shadow(0 0 60px rgba(255, 20, 80, .25));
+      border: none;
+      background: none;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      padding: 0;
+      touch-action: manipulation;
+    }
+
+    #heartBtn:active {
+      filter: drop-shadow(0 0 50px rgba(255, 20, 80, .9)) drop-shadow(0 0 100px rgba(255, 20, 80, .5))
+    }
+
+    #heartBtn svg {
+      width: 100%;
+      height: 100%;
+      display: block
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1)
+      }
+
+      15% {
+        transform: scale(1.12)
+      }
+
+      30% {
+        transform: scale(1)
+      }
+
+      45% {
+        transform: scale(1.08)
+      }
+    }
+
+    .orbit {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0
+    }
+
+    .dot {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: #ff4081;
+      border-radius: 50%;
+      opacity: .7;
+      animation: orb var(--s) linear infinite
+    }
+
+    @keyframes orb {
+      0% {
+        transform: rotate(var(--a)) translateX(min(38vw, 130px)) rotate(calc(-1*var(--a)))
+      }
+
+      100% {
+        transform: rotate(calc(var(--a)+360deg)) translateX(min(38vw, 130px)) rotate(calc(-1*(var(--a)+360deg)))
+      }
+    }
+
+    .tap-text {
+      font-family: 'Dancing Script', cursive;
+      color: #ff6b9d;
+      font-size: clamp(1.1rem, 4vw, 1.4rem);
+      margin-top: 25px;
+      animation: fl 2s ease-in-out infinite alternate;
+      text-shadow: 0 0 15px rgba(255, 107, 157, .5);
+      letter-spacing: 1px;
+      text-align: center
+    }
+
+    @keyframes fl {
+      0% {
+        opacity: .6;
+        transform: translateY(0)
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(-6px)
+      }
+    }
+
+    /* ===== FALLING WISHES ===== */
+    #scene {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      overflow: hidden;
+      display: none
+    }
+
+    #scene.on {
+      display: block
+    }
+
+    .w {
+      position: fixed;
+      font-family: 'Dancing Script', cursive;
+      color: var(--c);
+      font-size: var(--fs);
+      white-space: nowrap;
+      text-shadow: 0 0 10px var(--c);
+      left: var(--x);
+      opacity: 0;
+      animation: fall var(--dur) var(--del) linear forwards;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-60px) rotate(var(--r)) scale(.5);
+        opacity: 0
+      }
+
+      8% {
+        opacity: 1
+      }
+
+      80% {
+        opacity: .8
+      }
+
+      100% {
+        transform: translateY(calc(100vh + 80px)) rotate(calc(var(--r) + 25deg)) scale(1);
+        opacity: 0
+      }
+    }
+
+    /* Float hearts */
+    .fh {
+      position: fixed;
+      left: var(--fx);
+      bottom: 0;
+      opacity: 0;
+      animation: fup var(--fd) var(--fde) ease-out forwards;
+    }
+
+    @keyframes fup {
+      0% {
+        transform: translateY(60px) scale(.3);
+        opacity: 0
+      }
+
+      15% {
+        opacity: var(--fo)
+      }
+
+      100% {
+        transform: translateY(calc(-100vh - 80px)) translateX(var(--sw)) scale(1);
+        opacity: 0
+      }
+    }
+
+    /* ===== CENTER MSG ===== */
+    #msg {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 8;
+      text-align: center;
+      pointer-events: none;
+      width: auto;
+      min-width: 88vw;
+      max-width: 95vw;
+      padding: 25px 15px;
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, .6) 0%, transparent 70%);
+      border-radius: 20px;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+    }
+
+    #msg.on {
+      opacity: 1
+    }
+
+    #msg h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(0.9rem, 3.8vw, 2.5rem);
+      color: #ff4081;
+      text-shadow: 0 0 25px rgba(255, 64, 129, .7), 0 0 50px rgba(255, 64, 129, .35);
+      margin-bottom: 16px;
+      animation: glow 2s ease-in-out infinite alternate;
+      line-height: 1.3;
+      white-space: nowrap;
+    }
+
+    #msg p {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(1.1rem, 4.5vw, 1.8rem);
+      color: #ff80ab;
+      text-shadow: 0 0 12px rgba(255, 128, 171, .4);
+      line-height: 1.9
+    }
+
+    @keyframes glow {
+      0% {
+        text-shadow: 0 0 25px rgba(255, 64, 129, .7), 0 0 50px rgba(255, 64, 129, .3)
+      }
+
+      100% {
+        text-shadow: 0 0 40px rgba(255, 64, 129, 1), 0 0 80px rgba(255, 64, 129, .5)
+      }
+    }
+
+    /* ===== SPARKLE ===== */
+    .sp {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 20;
+      animation: spo .7s ease-out forwards
+    }
+
+    @keyframes spo {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1
+      }
+
+      100% {
+        transform: translate(var(--sx), var(--sy)) scale(0);
+        opacity: 0
+      }
+    }
+
+    /* ===== BUTTONS ===== */
+    #musicBtn {
+      position: fixed;
+      bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+      right: 16px;
+      z-index: 50;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 64, 129, .5);
+      background: rgba(255, 64, 129, .15);
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+
+    #musicBtn.on {
+      display: flex
+    }
+
+    #musicBtn:active {
+      background: rgba(255, 64, 129, .35);
+      transform: scale(.92)
+    }
+
+    .bar {
+      width: 3px;
+      height: 12px;
+      background: #ff4081;
+      margin: 0 1.5px;
+      border-radius: 2px;
+      animation: eq .6s ease-in-out infinite alternate
+    }
+
+    .bar:nth-child(1) {
+      animation-delay: 0s
+    }
+
+    .bar:nth-child(2) {
+      animation-delay: .15s;
+      height: 18px
+    }
+
+    .bar:nth-child(3) {
+      animation-delay: .3s
+    }
+
+    #musicBtn.muted .bar {
+      animation: none;
+      height: 3px
+    }
+
+    @keyframes eq {
+      0% {
+        height: 4px
+      }
+
+      100% {
+        height: 18px
+      }
+    }
+
+    #replayBtn {
+      position: fixed;
+      bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+      left: 16px;
+      z-index: 50;
+      padding: 10px 18px;
+      border-radius: 25px;
+      border: 1px solid rgba(255, 64, 129, .4);
+      background: rgba(255, 64, 129, .1);
+      color: #ff80ab;
+      font-family: 'Quicksand', sans-serif;
+      font-size: .82rem;
+      cursor: pointer;
+      display: none;
+      letter-spacing: 1px;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+
+    #replayBtn.on {
+      display: block
+    }
+
+    #replayBtn:active {
+      background: rgba(255, 64, 129, .3);
+      transform: scale(.95)
+    }
+
+    @media(orientation:landscape) and (max-height:500px) {
+      #heartBtn {
+        width: min(35vh, 160px);
+        height: min(35vh, 160px)
+      }
+
+      #msg h1 {
+        font-size: clamp(1.1rem, 4vh, 2.2rem)
+      }
+
+      #msg p {
+        font-size: clamp(.75rem, 2.5vh, 1.1rem);
+        line-height: 1.5
+      }
+
+      .tap-text {
+        font-size: clamp(.9rem, 2.5vh, 1.1rem);
+        margin-top: 10px
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="stars" id="stars"></div>
+  <div class="vignette"></div>
+
+  <!-- LANDING -->
+  <div id="landing">
+    <button id="heartBtn" type="button">
+      <svg viewBox="0 0 512 512">
+        <defs>
+          <linearGradient id="hg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ff1744" />
+            <stop offset="50%" stop-color="#ff4081" />
+            <stop offset="100%" stop-color="#f50057" />
+          </linearGradient>
+        </defs>
+        <path fill="url(#hg)"
+          d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z" />
+      </svg>
+      <div class="orbit">
+        <div class="dot" style="--a:0deg;--s:4s"></div>
+        <div class="dot" style="--a:90deg;--s:5s;background:#ff80ab"></div>
+        <div class="dot" style="--a:180deg;--s:3.5s;background:#f48fb1"></div>
+        <div class="dot" style="--a:270deg;--s:4.5s"></div>
+      </div>
+    </button>
+    <p class="tap-text" id="tapText">✨ Hello anh iu ✨</p>
+  </div>
+
+  <!-- SCENE -->
+  <div id="scene"></div>
+
+  <!-- MESSAGE -->
+  <div id="msg">
+    <h1>💕 Valentine đầu tiên với anh Hiếu 💕</h1>
+    <p>Chúc anh đi tàu vui vẻ, khỏe mạnh,<br>sớm về với em để bù ngày Valentine nhé<br>🩷 Iu anh nhìu 🩷</p>
+  </div>
+
+  <!-- CONTROLS -->
+  <button id="musicBtn" class="muted" type="button">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </button>
+  <button id="replayBtn" type="button">↻ Xem lại</button>
+
+  <!-- AUDIO -->
+  <audio id="audio" loop preload="auto" playsinline>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // ========================================
+    // ALL CODE - SIMPLE & ROBUST
+    // ========================================
+
+    var isMob = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    var starCount = isMob ? 50 : 100;
+    var wishMax = isMob ? 80 : 180;
+    var waveSize = isMob ? 10 : 22;
+    var heartNum = isMob ? 15 : 35;
+    var sparkNum = isMob ? 16 : 35;
+
+    // --- Elements ---
+    var landing = document.getElementById('landing');
+    var scene = document.getElementById('scene');
+    var msg = document.getElementById('msg');
+    var heartBtn = document.getElementById('heartBtn');
+    var musicBtn = document.getElementById('musicBtn');
+    var replayBtn = document.getElementById('replayBtn');
+    var audio = document.getElementById('audio');
+    var starsEl = document.getElementById('stars');
+
+    // --- Data ---
+    var wishes = [
+      "Chào anh Hiếu hấp, em người yêu anh nè",
+      "Em nhớ anh nhiều lắm, ngày nào cũng nhớ ạ",
+      "Cảm ơn anh đã tìm đến em và yêu em",
+      "Em hy vọng mình có thể ở bên nhau lâu hơn",
+      "Mong anh yêu và thương em nhiều hơn",
+      "Mong anh đợi em 2 năm rồi cưới",
+      "Mong anh nhắn tin và gọi điện cho em nhiều hơn",
+      "Mong anh đừng quên rằng em đang rất cố gắng",
+      "Em yêu anh nhiều lắm",
+      "Chồng yêu ạ!",
+      "Love you so much",
+      "How about your gift :)))",
+      "My Hieu hap",
+      "Miss you so much",
+      "Thank you for showing up",
+      "Be smile and happy everyday",
+      "Thanh Bich loves you",
+      "Kiss you"
+    ];
+
+    var colors = ['#ff1744', '#ff4081', '#f50057', '#ff80ab', '#ff6090', '#e91e63', '#f48fb1', '#ff5252', '#ff8a80', '#ff69b4'];
+    var heartEmoji = ['❤️', '💕', '💖', '💗', '💘', '💝', '💞', '💓', '🌹', '🩷'];
+
+    // --- State ---
+    var started = false;
+    var playing = false;
+    var allTimers = [];
+
+    // ===== STARS =====
+    (function () {
+      for (var i = 0; i < starCount; i++) {
+        var s = document.createElement('div');
+        s.className = 'star';
+        var sz = 1 + Math.random() * 2.5;
+        s.style.cssText = 'left:' + Math.random() * 100 + '%;top:' + Math.random() * 100 + '%;width:' + sz + 'px;height:' + sz + 'px;--d:' + (1.5 + Math.random() * 3) + 's;animation-delay:' + Math.random() * 3 + 's';
+        starsEl.appendChild(s);
+      }
+    })();
+
+    // ===== HEART CLICK =====
+    function go() {
+      if (started) return;
+      started = true;
+
+      // 1. Sparkle burst
+      doSparkles();
+
+      // 2. Hide landing
+      landing.classList.add('gone');
+
+      // 3. Play music
+      audio.volume = 0.5;
+      try {
+        var p = audio.play();
+        if (p && p.then) {
+          p.then(function () { playing = true; musicBtn.classList.remove('muted') })
+            .catch(function () { playing = false; musicBtn.classList.add('muted') });
+        }
+      } catch (e) { }
+
+      // 4. Show scene
+      scene.classList.add('on');
+
+      // 5. Start wish waves
+      doWishes();
+
+      // 6. Float hearts
+      doHearts();
+
+      // 7. Show message after 2s
+      allTimers.push(setTimeout(function () { msg.classList.add('on') }, 2000));
+
+      // 8. Show buttons after 1.2s
+      allTimers.push(setTimeout(function () {
+        musicBtn.classList.add('on');
+        replayBtn.classList.add('on');
+      }, 1200));
+    }
+
+    // === Mobile + Desktop: use both touch and click ===
+    // On mobile, touchend fires but click may not on complex SVG buttons.
+    var touchFired = false;
+    var canClick = false;
+
+    // Intro sequence
+    var introTexts = [
+      "✨ Hello anh iu ✨",
+      "✨ Tấm lòng em đấy ạ ✨",
+      "✨ Nhó đọc hết nha ✨"
+    ];
+    var introIdx = 1; // Start from 2nd text because 1st is in HTML
+    var tapTextEl = document.getElementById('tapText');
+
+    function nextIntro() {
+      // Fade out current text
+      tapTextEl.style.opacity = 0;
+
+      setTimeout(function () {
+        if (introIdx >= introTexts.length) {
+          // If we've shown all texts, just ensure opacity is back (though loop shouldn't reach here if logic is correct)
+          // Actually, if we are here, we might want to just stop.
+          // Let's rely on the scheduling logic below instead.
+          return;
+        }
+
+        // Change text
+        tapTextEl.textContent = introTexts[introIdx];
+        // Fade in
+        tapTextEl.style.opacity = 1;
+
+        introIdx++;
+
+        // If there are more texts, schedule next fade out
+        if (introIdx < introTexts.length) {
+          setTimeout(nextIntro, 2000);
+        } else {
+          // All texts shown. Allow click after a delay.
+          setTimeout(function () {
+            canClick = true;
+          }, 1000);
+        }
+      }, 500); // Wait for fade out
+    }
+
+    // Start the sequence after user has read the first text for 2s
+    setTimeout(nextIntro, 2000);
+
+    heartBtn.addEventListener('touchend', function (e) {
+      if (!canClick) return;
+      e.preventDefault();
+      e.stopPropagation();
+      touchFired = true;
+      go();
+    }, { passive: false });
+
+    heartBtn.addEventListener('click', function (e) {
+      if (!canClick) return;
+      if (touchFired) { touchFired = false; return; }
+      go();
+    });
+
+    // ===== WISH WAVES =====
+    function doWishes() {
+      var total = 0;
+
+      function wave(n, baseDelay) {
+        for (var i = 0; i < n && total < wishMax; i++) {
+          total++;
+          var el = document.createElement('div');
+          el.className = 'w';
+          el.textContent = wishes[Math.floor(Math.random() * wishes.length)];
+          var c = colors[Math.floor(Math.random() * colors.length)];
+          var fs = (isMob ? 0.7 + Math.random() * 0.9 : 0.85 + Math.random() * 1.4) + 'rem';
+          var del = baseDelay + Math.random() * 2.5;
+          var dur = 5 + Math.random() * 5;
+          el.style.cssText = '--c:' + c + ';--fs:' + fs + ';--x:' + Math.random() * 88 + '%;--del:' + del + 's;--dur:' + dur + 's;--r:' + (-12 + Math.random() * 24) + 'deg';
+          scene.appendChild(el);
+          // cleanup
+          (function (e, t) { allTimers.push(setTimeout(function () { if (e.parentNode) e.parentNode.removeChild(e) }, (t) * 1000 + 600)) })(el, del + dur);
+        }
+      }
+
+      // Waves
+      wave(waveSize, 0);
+      allTimers.push(setTimeout(function () { wave(waveSize, 0) }, 2500));
+      allTimers.push(setTimeout(function () { wave(waveSize, 0) }, 5500));
+      allTimers.push(setTimeout(function () { wave(waveSize, 0) }, 9000));
+      allTimers.push(setTimeout(function () { wave(waveSize, 0) }, 12500));
+      allTimers.push(setTimeout(function () { wave(waveSize, 0) }, 16000));
+
+      // Continuous
+      var iv = setInterval(function () {
+        if (total >= wishMax) { clearInterval(iv); return }
+        wave(isMob ? 4 : 7, 0);
+      }, 4000);
+      allTimers.push(iv);
+    }
+
+    // ===== FLOATING HEARTS =====
+    function doHearts() {
+      for (var i = 0; i < heartNum; i++) {
+        var h = document.createElement('div');
+        h.className = 'fh';
+        h.textContent = heartEmoji[Math.floor(Math.random() * heartEmoji.length)];
+        h.style.cssText = 'font-size:' + (0.8 + Math.random() * 1.8) + 'rem;--fx:' + Math.random() * 100 + '%;--fd:' + (6 + Math.random() * 8) + 's;--fde:' + Math.random() * 12 + 's;--fo:' + (0.3 + Math.random() * 0.6) + ';--sw:' + (-50 + Math.random() * 100) + 'px';
+        scene.appendChild(h);
+      }
+    }
+
+    // ===== SPARKLES =====
+    function doSparkles() {
+      var r = heartBtn.getBoundingClientRect();
+      var cx = r.left + r.width / 2;
+      var cy = r.top + r.height / 2;
+      for (var i = 0; i < sparkNum; i++) {
+        var sp = document.createElement('div');
+        sp.className = 'sp';
+        var ang = (Math.PI * 2 / sparkNum) * i + Math.random() * .5;
+        var dist = 50 + Math.random() * 100;
+        var c = colors[Math.floor(Math.random() * colors.length)];
+        var sz = 3 + Math.random() * 4;
+        sp.style.cssText = 'left:' + cx + 'px;top:' + cy + 'px;width:' + sz + 'px;height:' + sz + 'px;background:' + c + ';box-shadow:0 0 6px ' + c + ';--sx:' + (Math.cos(ang) * dist) + 'px;--sy:' + (Math.sin(ang) * dist) + 'px';
+        document.body.appendChild(sp);
+        (function (e) { allTimers.push(setTimeout(function () { if (e.parentNode) e.parentNode.removeChild(e) }, 800)) })(sp);
+      }
+    }
+
+    // ===== MUSIC BTN =====
+    function toggleMusic() {
+      if (playing) {
+        audio.pause();
+        playing = false;
+        musicBtn.classList.add('muted');
+      } else {
+        audio.play().then(function () { playing = true; musicBtn.classList.remove('muted') }).catch(function () { });
+      }
+    }
+    musicBtn.addEventListener('touchend', function (e) { e.preventDefault(); toggleMusic() }, { passive: false });
+    musicBtn.addEventListener('click', function (e) { if (!isMob) toggleMusic() });
+
+    // ===== REPLAY =====
+    function doReplay() {
+      for (var i = 0; i < allTimers.length; i++) { clearTimeout(allTimers[i]); clearInterval(allTimers[i]) }
+      allTimers = [];
+      started = false;
+      touchFired = false;
+      scene.innerHTML = '';
+      scene.classList.remove('on');
+      msg.classList.remove('on');
+      landing.classList.remove('gone');
+      musicBtn.classList.remove('on');
+      musicBtn.classList.add('muted');
+      replayBtn.classList.remove('on');
+      audio.pause();
+      audio.currentTime = 0;
+      playing = false;
+
+      // Reset intro sequence
+      canClick = false;
+      introIdx = 1;
+      tapTextEl.textContent = introTexts[0];
+      tapTextEl.style.opacity = 1;
+      setTimeout(nextIntro, 2000);
+    }
+    replayBtn.addEventListener('touchend', function (e) { e.preventDefault(); doReplay() }, { passive: false });
+    replayBtn.addEventListener('click', function (e) { if (!isMob) doReplay() });
+  </script>
+</body>
+
+</html>
