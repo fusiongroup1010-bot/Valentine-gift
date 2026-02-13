@@ -659,19 +659,35 @@
       var total = 0;
 
       function wave(n, baseDelay) {
-        for (var i = 0; i < n && total < wishMax; i++) {
-          total++;
-          var el = document.createElement('div');
-          el.className = 'w';
-          el.textContent = wishes[Math.floor(Math.random() * wishes.length)];
-          var c = colors[Math.floor(Math.random() * colors.length)];
-          var fs = (isMob ? 0.7 + Math.random() * 0.9 : 0.85 + Math.random() * 1.4) + 'rem';
-          var del = baseDelay + Math.random() * 2.5;
-          var dur = 5 + Math.random() * 5;
-          el.style.cssText = '--c:' + c + ';--fs:' + fs + ';--x:' + Math.random() * 88 + '%;--del:' + del + 's;--dur:' + dur + 's;--r:' + (-12 + Math.random() * 24) + 'deg';
-          scene.appendChild(el);
-          // cleanup
-          (function (e, t) { allTimers.push(setTimeout(function () { if (e.parentNode) e.parentNode.removeChild(e) }, (t) * 1000 + 600)) })(el, del + dur);
+        for (var i = 0; i < n; i++) {
+          if (total < wishMax) {
+            total++;
+            // Falling Text
+            var el = document.createElement('div');
+            el.className = 'w';
+            el.textContent = wishes[Math.floor(Math.random() * wishes.length)];
+            var c = colors[Math.floor(Math.random() * colors.length)];
+            var fs = (isMob ? 0.7 + Math.random() * 0.9 : 0.85 + Math.random() * 1.4) + 'rem';
+            var del = baseDelay + Math.random() * 2.5;
+            // Duration > 10s (12s to 20s)
+            var dur = 12 + Math.random() * 8;
+            el.style.cssText = '--c:' + c + ';--fs:' + fs + ';--x:' + Math.random() * 88 + '%;--del:' + del + 's;--dur:' + dur + 's;--r:' + (-12 + Math.random() * 24) + 'deg';
+            scene.appendChild(el);
+            // cleanup
+            (function (e, t) { allTimers.push(setTimeout(function () { if (e.parentNode) e.parentNode.removeChild(e) }, (t) * 1000 + 600)) })(el, del + dur);
+          }
+
+          // Also spawn a falling heart (doesn't count towards total limit strictly, or separate visual)
+          var h = document.createElement('div');
+          h.className = 'w';
+          h.textContent = heartEmoji[Math.floor(Math.random() * heartEmoji.length)];
+          var cH = colors[Math.floor(Math.random() * colors.length)];
+          var fsH = (isMob ? 1.2 + Math.random() * 1 : 1.5 + Math.random() * 1.5) + 'rem';
+          var delH = baseDelay + Math.random() * 3;
+          var durH = 12 + Math.random() * 10; // Slower hearts
+          h.style.cssText = '--c:' + cH + ';--fs:' + fsH + ';--x:' + Math.random() * 95 + '%;--del:' + delH + 's;--dur:' + durH + 's;--r:0deg';
+          scene.appendChild(h);
+          (function (e, t) { allTimers.push(setTimeout(function () { if (e.parentNode) e.parentNode.removeChild(e) }, (t) * 1000 + 600)) })(h, delH + durH);
         }
       }
 
@@ -685,7 +701,20 @@
 
       // Continuous
       var iv = setInterval(function () {
-        if (total >= wishMax) { clearInterval(iv); return }
+        // Only limit text total, hearts can keep falling
+        // Reset limit occasionally if needed, but for simplicity let's stick to limit check
+        if (total >= wishMax) {
+          // If mostly done, maybe just spawn hearts?
+          // Or just spawn few hearts
+          var hOnly = document.createElement('div');
+          hOnly.className = 'w';
+          hOnly.textContent = heartEmoji[Math.floor(Math.random() * heartEmoji.length)];
+          var dur = 15 + Math.random() * 10;
+          hOnly.style.cssText = '--c:#ff4081;--fs:1.5rem;--x:' + Math.random() * 95 + '%;--del:0s;--dur:' + dur + 's;--r:0deg';
+          scene.appendChild(hOnly);
+          (function (e, t) { allTimers.push(setTimeout(function () { if (e.parentNode) e.parentNode.removeChild(e) }, (t) * 1000 + 600)) })(hOnly, dur);
+          return;
+        }
         wave(isMob ? 4 : 7, 0);
       }, 4000);
       allTimers.push(iv);
